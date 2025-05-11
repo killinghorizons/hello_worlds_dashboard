@@ -1,0 +1,164 @@
+"use client";
+import { IHelloWorld } from "@/types/HelloWorld";
+import Link from "next/link";
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  flexRender,
+} from "@tanstack/react-table";
+import { useMemo, useState } from "react";
+// Comps
+import SearchInput from "./SearchInput";
+
+const Table = ({ data }: { data: IHelloWorld[] }) => {
+  const [sorting, setSorting] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState("");
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "id",
+        header: "Id",
+      },
+      {
+        accessorKey: "language",
+        header: "Language",
+      },
+      {
+        accessorKey: "slug",
+        header: "Slug",
+      },
+      {
+        id: "read",
+        header: "Read",
+        cell: (info) => (
+          <Link
+            href={`/read/${info.row.original.id}`}
+            className="btn btn-success"
+          >
+            Read
+          </Link>
+        ),
+      },
+      {
+        header: "Update",
+        cell: (info) => (
+          <Link
+            href={`/update/${info.row.original.id}`}
+            className="btn btn-warning"
+          >
+            Update
+          </Link>
+        ),
+      },
+      {
+        header: "Delete",
+        cell: (info) => <button className="btn btn-error">Delete</button>,
+      },
+    ],
+    []
+  );
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: {
+      sorting,
+      globalFilter,
+    },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    globalFilterFn: "includesString",
+  });
+
+  return (
+    <div>
+      <SearchInput
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
+      <div className="overflow-x-auto">
+        <table className="table table-zebra mb-5">
+          <thead className="font-bold text-xl text-neutral-50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    <div>
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {{
+                        asc: "🔼",
+                        desc: "🔽",
+                      }[header.column.getIsSorted()] ?? ""}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="flex justify-between items-center">
+          <div>
+            <select
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value));
+              }}
+              className="select"
+            >
+              {[10, 20, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <button
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="btn"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="btn"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Table;
