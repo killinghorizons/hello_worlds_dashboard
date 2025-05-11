@@ -1,73 +1,81 @@
-"use client";
-import { IHelloWorld } from "@/types/HelloWorld";
-import Link from "next/link";
+"use client"
+import { IHelloWorld } from "@/types/HelloWorld"
+import Link from "next/link"
 import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  flexRender,
-} from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+  flexRender
+} from "@tanstack/react-table"
+import { useMemo, useState } from "react"
 // Comps
-import SearchInput from "./SearchInput";
+import SearchInput from "./SearchInput"
+import DeleteModal from "./DeleteModal"
 
 const Table = ({ data }: { data: IHelloWorld[] }) => {
-  const [sorting, setSorting] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [sorting, setSorting] = useState([])
+  const [globalFilter, setGlobalFilter] = useState("")
 
   const columns = useMemo(
     () => [
       {
         accessorKey: "id",
-        header: "Id",
+        header: "Id"
       },
       {
         accessorKey: "language",
-        header: "Language",
+        header: "Language"
       },
       {
         accessorKey: "slug",
-        header: "Slug",
+        header: "Slug"
       },
       {
         id: "read",
         header: "Read",
-        cell: (info) => (
+        cell: info => (
           <Link
             href={`/read/${info.row.original.id}`}
             className="btn btn-success"
           >
             Read
           </Link>
-        ),
+        )
       },
       {
         header: "Update",
-        cell: (info) => (
+        cell: info => (
           <Link
             href={`/update/${info.row.original.id}`}
             className="btn btn-warning"
           >
             Update
           </Link>
-        ),
+        )
       },
       {
         header: "Delete",
-        cell: (info) => <button className="btn btn-error">Delete</button>,
-      },
+        cell: info => (
+          <Link
+            href={`/delete/${info.row.original.id}`}
+            className="btn btn-error"
+          >
+            Delete
+          </Link>
+        )
+      }
     ],
     []
-  );
+  )
 
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
-      globalFilter,
+      globalFilter
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
@@ -75,8 +83,8 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    globalFilterFn: "includesString",
-  });
+    globalFilterFn: "includesString"
+  })
 
   return (
     <div>
@@ -84,12 +92,13 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
       />
+      {/* Form */}
       <div className="overflow-x-auto">
         <table className="table table-zebra mb-5">
           <thead className="font-bold text-xl text-neutral-50">
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <th
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
@@ -101,7 +110,7 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
                       )}
                       {{
                         asc: "🔼",
-                        desc: "🔽",
+                        desc: "🔽"
                       }[header.column.getIsSorted()] ?? ""}
                     </div>
                   </th>
@@ -110,9 +119,9 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
+            {table.getRowModel().rows.map(row => (
               <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map(cell => (
                   <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -126,12 +135,12 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
           <div>
             <select
               value={table.getState().pagination.pageSize}
-              onChange={(e) => {
-                table.setPageSize(Number(e.target.value));
+              onChange={e => {
+                table.setPageSize(Number(e.target.value))
               }}
               className="select"
             >
-              {[10, 20, 50].map((pageSize) => (
+              {[10, 20, 50].map(pageSize => (
                 <option key={pageSize} value={pageSize}>
                   Show {pageSize}
                 </option>
@@ -158,7 +167,7 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table

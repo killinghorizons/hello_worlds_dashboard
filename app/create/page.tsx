@@ -1,6 +1,6 @@
 // Comps
-import Heading from "@/components/Heading";
-import CreateForm from "@/components/forms/CreateForm";
+import Heading from "@/components/Heading"
+import CreateForm from "@/components/forms/CreateForm"
 
 const Create = async () => {
   return (
@@ -8,7 +8,7 @@ const Create = async () => {
       <Heading text="Create" />
       <CreateForm />
     </div>
-  );
-};
+  )
+}
 
-export default Create;
+export default Create

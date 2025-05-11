@@ -1,17 +1,17 @@
 // Comps
-import Heading from "@/components/Heading";
+import Heading from "@/components/Heading"
 // Db
-import { getById } from "@/actions/helloActions";
+import { getById } from "@/actions/helloActions"
 
 interface Props {
   params: {
-    id: string;
-  };
+    id: string
+  }
 }
 
 const Read = async ({ params }: Props) => {
-  const { id } = await params;
-  const helloWorld = await getById(parseInt(id));
+  const { id } = await params
+  const helloWorld = await getById(parseInt(id))
 
   return (
     <div>
@@ -24,7 +24,7 @@ const Read = async ({ params }: Props) => {
         <code>{helloWorld.code}</code>
       </pre>
     </div>
-  );
-};
+  )
+}
 
-export default Read;
+export default Read

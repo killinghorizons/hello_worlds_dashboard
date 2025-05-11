@@ -18,3 +18,5 @@ Open [http://localhost:3000](http://localhost:3000)
 
 - [ ] : move to useActionSate the useFormState
 - [ ] : add light/dark mode
+- [ ] : error handling on actions
+- [ ] : keyboard access for searchinput

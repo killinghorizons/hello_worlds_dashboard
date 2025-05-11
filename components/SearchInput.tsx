@@ -1,23 +1,23 @@
 interface Props {
-  globalFilter: string;
-  setGlobalFilter: (search: string) => void;
+  globalFilter: string
+  setGlobalFilter: (search: string) => void
 }
 
 const SearchInput = ({ globalFilter, setGlobalFilter }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGlobalFilter(e.target.value);
-    console.log(globalFilter);
-  };
+    setGlobalFilter(e.target.value)
+    console.log(globalFilter)
+  }
 
   return (
     <div className="w-full mb-6">
-      <label htmlFor="language" className="label block mb-4">
+      <label htmlFor="search" className="label block mb-4">
         Search:
       </label>
       <input
-        type="text"
-        name="language"
-        id="language"
+        type="search"
+        name="search"
+        id="search"
         required
         value={globalFilter}
         onChange={handleChange}
@@ -26,7 +26,7 @@ const SearchInput = ({ globalFilter, setGlobalFilter }: Props) => {
         placeholder="Search by id, language, slug"
       />
     </div>
-  );
-};
+  )
+}
 
-export default SearchInput;
+export default SearchInput

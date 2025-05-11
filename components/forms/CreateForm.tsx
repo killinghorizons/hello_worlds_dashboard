@@ -1,15 +1,15 @@
-"use client";
+"use client"
 // Db
-import { addHello } from "@/actions/helloActions";
+import { addHello } from "@/actions/helloActions"
 // React
-import { useFormState } from "react-dom";
+import { useFormState } from "react-dom"
 // Comps
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "./SubmitButton"
 
 const CreateForm = () => {
   const [formState, action] = useFormState(addHello, {
-    message: "",
-  });
+    message: ""
+  })
 
   return (
     <form action={action}>
@@ -41,7 +41,7 @@ const CreateForm = () => {
           />
         </div>
         {/* Category  */}
-        <div className="w-1/4">
+        <div className="w-1/5">
           <label htmlFor="category" className="label block mb-4">
             Category
           </label>
@@ -72,7 +72,7 @@ const CreateForm = () => {
         </div>
       )}
     </form>
-  );
-};
+  )
+}
 
-export default CreateForm;
+export default CreateForm
