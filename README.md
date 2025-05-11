@@ -20,3 +20,4 @@ Open [http://localhost:3000](http://localhost:3000)
 - [ ] : add light/dark mode
 - [ ] : error handling on actions
 - [ ] : keyboard access for searchinput
+- [ ] : toasting

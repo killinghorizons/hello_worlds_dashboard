@@ -1,16 +1,12 @@
-"use client"
-import { useFormStatus } from "react-dom"
-
 interface Props {
   label: String
   loading: React.ReactNode
+  pending: boolean
 }
 
-const SubmitButton = ({ label, loading }: Props) => {
-  const { pending } = useFormStatus()
-
+const SubmitButton = ({ label, loading, pending }: Props) => {
   return (
-    <button type="submit" className="btn btn-success w-full btn-xl">
+    <button type="submit" className="btn btn-primary w-full btn-xl">
       {pending ? loading : label}
     </button>
   )

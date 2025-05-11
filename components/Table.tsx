@@ -1,6 +1,5 @@
 "use client"
 import { IHelloWorld } from "@/types/HelloWorld"
-import Link from "next/link"
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,7 +11,7 @@ import {
 import { useMemo, useState } from "react"
 // Comps
 import SearchInput from "./SearchInput"
-import DeleteModal from "./DeleteModal"
+import BtnLink from "./BtnLink"
 
 const Table = ({ data }: { data: IHelloWorld[] }) => {
   const [sorting, setSorting] = useState([])
@@ -23,6 +22,10 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
       {
         accessorKey: "id",
         header: "Id"
+      },
+      {
+        accessorKey: "category",
+        header: "C"
       },
       {
         accessorKey: "language",
@@ -36,34 +39,31 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
         id: "read",
         header: "Read",
         cell: info => (
-          <Link
+          <BtnLink
             href={`/read/${info.row.original.id}`}
-            className="btn btn-success"
-          >
-            Read
-          </Link>
+            label="Read"
+            type="success"
+          />
         )
       },
       {
         header: "Update",
         cell: info => (
-          <Link
+          <BtnLink
             href={`/update/${info.row.original.id}`}
-            className="btn btn-warning"
-          >
-            Update
-          </Link>
+            label="Update"
+            type="warning"
+          />
         )
       },
       {
         header: "Delete",
         cell: info => (
-          <Link
+          <BtnLink
             href={`/delete/${info.row.original.id}`}
-            className="btn btn-error"
-          >
-            Delete
-          </Link>
+            label="Delete"
+            type="error"
+          />
         )
       }
     ],
