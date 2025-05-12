@@ -13,7 +13,12 @@ const Nav = () => {
             Create
           </Link>
         </div>
-        <ScrollTopButton />
+        <div className="flex items-center gap-4">
+          <Link href="/ressources" className="btn btn-neutral btn-sm">
+            Ressources
+          </Link>
+          <ScrollTopButton />
+        </div>
       </div>
     </nav>
   )
