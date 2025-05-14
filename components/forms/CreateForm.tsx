@@ -1,6 +1,6 @@
 "use client"
 // Next
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 // Action
 import { createHello } from "@/actions/helloActions"
 // React
@@ -10,6 +10,7 @@ import SubmitButton from "./SubmitButton"
 import { toast } from "sonner"
 
 const CreateForm = () => {
+  const router = useRouter()
   const [state, formAction, isPending] = useActionState(createHello, {
     success: false,
     message: ""
@@ -18,7 +19,7 @@ const CreateForm = () => {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message)
-      redirect("/")
+      router.push("/")
     }
     if (state.success === false && state.message.length > 0)
       toast(state.message)

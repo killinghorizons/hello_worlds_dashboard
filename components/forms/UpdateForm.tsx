@@ -1,6 +1,6 @@
 "use client"
 // Next
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 // React
 import { useActionState, useEffect } from "react"
 // Comps
@@ -11,25 +11,25 @@ import { updateHello } from "@/actions/helloActions"
 import { toast } from "sonner"
 
 const UpdateForm = ({ id, name, code }: IHelloWorld) => {
-  const [state, formAction, isPending] = useActionState(
-    updateHello.bind(null, id),
-    {
-      message: "",
-      success: false
-    }
-  )
+  const router = useRouter()
+
+  const [state, formAction, isPending] = useActionState(updateHello, {
+    message: "",
+    success: false
+  })
 
   useEffect(() => {
     if (state.success) {
       toast.success(state.message)
-      redirect("/")
+      router.push("/")
+    } else if (state.message && !state.success) {
+      toast.error(state.message)
     }
-    if (state.success === false && state.message.length > 0)
-      toast(state.message)
   }, [state.success])
 
   return (
     <form action={formAction}>
+      <input type="hidden" name="id" id="id" value={id} />
       <div className="mb-4">
         <label htmlFor="name" className="label block mb-4">
           Name:

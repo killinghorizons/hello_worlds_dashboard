@@ -23,7 +23,7 @@ const SearchInput = ({ globalFilter, setGlobalFilter }: Props) => {
         onChange={handleChange}
         aria-selected
         className="input w-full block"
-        placeholder="Search by id, language, slug"
+        placeholder="Search by id & name"
       />
     </div>
   )

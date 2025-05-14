@@ -2,30 +2,25 @@
 import Heading from "@/components/Heading"
 import UpdateForm from "@/components/forms/UpdateForm"
 // Db
-import { getById } from "@/actions/helloActions"
+import { getHelloById } from "@/actions/helloActions"
 import { IHelloWorld } from "@/types/HelloWorld"
-import NotFound from "@/app/not-found"
+import { notFound } from "next/navigation"
 
 interface Props {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 const Update = async ({ params }: Props) => {
   const { id } = await params
 
-  if (!parseInt(id)) return <NotFound />
-  if (parseInt(id) && parseInt(id) > 10e5) return <NotFound />
-
-  const idInt = parseInt(id)
-
-  const { id: idDb, name, code }: IHelloWorld = await getById(idInt)
+  const helloWorld = await getHelloById(id)
+  if (!helloWorld) notFound()
+  const { id: idHello, name, code } = helloWorld
 
   return (
     <section>
       <Heading text="Update" />
-      <UpdateForm id={idDb} name={name} code={code} />
+      <UpdateForm id={idHello} name={name} code={code} />
     </section>
   )
 }

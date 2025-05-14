@@ -4,19 +4,33 @@ import { revalidatePath } from "next/cache"
 import { db } from "@/db/drizzle"
 import { hello } from "@/db/schema"
 
+// List all
 export const getData = async () => {
-  const data = await db.select().from(hello).orderBy(desc(hello.id))
-  return data
-}
-
-export const getById = async (id: number) => {
-  const data = await db.select().from(hello).where(eq(hello.id, id))
-  if (data.length > 0) {
-    return data[0]
+  try {
+    const data = await db.select().from(hello).orderBy(desc(hello.id))
+    return data
+  } catch (error) {
+    console.error(error)
+    return []
   }
-  return {}
 }
 
+// List one
+export const getHelloById = async (id: string) => {
+  try {
+    const data = await db
+      .select()
+      .from(hello)
+      .where(eq(hello.id, Number(id)))
+
+    return data[0]
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+// Create one
 export const createHello = async (
   formState: { success: boolean; message: string },
   formData: FormData
@@ -53,14 +67,15 @@ export const createHello = async (
   }
 }
 
+// Update one
 export const updateHello = async (
-  id: number,
   formState: { success: boolean; message: string },
   formData: FormData
 ): Promise<{ success: boolean; message: string }> => {
   try {
     const name = formData.get("name") as string
     const code = formData.get("code") as string
+    const helloId = Number(formData.get("id"))
 
     // Validation
     if (!name || !code) {
@@ -70,10 +85,10 @@ export const updateHello = async (
       }
     }
 
-    await db
+    const update = await db
       .update(hello)
       .set({ name: name, code: code })
-      .where(eq(hello.id, id))
+      .where(eq(hello.id, helloId))
 
     // Success
     revalidatePath("/")
@@ -90,7 +105,30 @@ export const updateHello = async (
   }
 }
 
-export const deleteHello = async (id: number) => {
-  await db.delete(hello).where(eq(hello.id, id))
-  revalidatePath("/")
+export const deleteHello = async (
+  formState: { success: boolean; message: string },
+  formData: FormData
+): Promise<{ success: boolean; message: string }> => {
+  const helloId = Number(formData.get("id"))
+
+  if (!helloId) {
+    return {
+      success: false,
+      message: "Hello doesn't exists."
+    }
+  }
+
+  try {
+    await db.delete(hello).where(eq(hello.id, helloId))
+    return {
+      success: true,
+      message: "Hello deleted."
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message: "An error has occured while deleting the Hello."
+    }
+  }
 }

@@ -12,6 +12,7 @@ import { useMemo, useState } from "react"
 // Comps
 import SearchInput from "./SearchInput"
 import BtnLink from "./BtnLink"
+import DeleteButton from "./DeleteButton"
 
 const Table = ({ data }: { data: IHelloWorld[] }) => {
   const [sorting, setSorting] = useState([])
@@ -28,38 +29,22 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
         header: "Name"
       },
       {
-        accessorKey: "code",
-        header: "Code"
-      },
-      {
-        id: "read",
-        header: "Read",
-        cell: info => (
-          <BtnLink
-            href={`/read/${info.row.original.id}`}
-            label="Read"
-            type="success"
-          />
-        )
-      },
-      {
-        header: "Update",
-        cell: info => (
-          <BtnLink
-            href={`/update/${info.row.original.id}`}
-            label="Update"
-            type="warning"
-          />
-        )
-      },
-      {
-        header: "Delete",
-        cell: info => (
-          <BtnLink
-            href={`/delete/${info.row.original.id}`}
-            label="Delete"
-            type="error"
-          />
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            <BtnLink
+              href={`/read/${row.original.id}`}
+              label="Read"
+              type="success"
+            />
+            <BtnLink
+              href={`/update/${row.original.id}`}
+              label="Update"
+              type="warning"
+            />
+            <DeleteButton id={row.original.id} />
+          </div>
         )
       }
     ],
@@ -90,7 +75,7 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
       />
       {/* Form */}
       <div className="overflow-x-auto">
-        <table className="table table-zebra mb-5">
+        <table className="table table-zebra mb-5 table-fixed">
           <thead className="font-bold text-xl text-neutral-50">
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>

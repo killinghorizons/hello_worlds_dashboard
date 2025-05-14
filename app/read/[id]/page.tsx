@@ -1,28 +1,23 @@
 // Comps
 import Heading from "@/components/Heading"
 // Db
-import { getById } from "@/actions/helloActions"
+import { getHelloById } from "@/actions/helloActions"
+import { notFound } from "next/navigation"
+import HelloDisplay from "@/components/HelloDisplay"
 
 interface Props {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 const Read = async ({ params }: Props) => {
   const { id } = await params
-  const helloWorld = await getById(parseInt(id))
+  const helloWorld = await getHelloById(id)
+  if (!helloWorld) notFound()
 
   return (
     <div>
       <Heading text="Read" />
-      <h1 className="text-3xl font-bold mb-4 text-primary">
-        Language: {helloWorld.language}
-      </h1>
-      <h2 className="text-xl font-bold mb-4">Slug : {helloWorld.slug}</h2>
-      <pre className="overflow-x-auto">
-        <code>{helloWorld.code}</code>
-      </pre>
+      <HelloDisplay id={id} name={helloWorld.name} code={helloWorld.code} />
     </div>
   )
 }
