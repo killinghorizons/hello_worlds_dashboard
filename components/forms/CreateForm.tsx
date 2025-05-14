@@ -17,10 +17,11 @@ const CreateForm = () => {
 
   useEffect(() => {
     if (state.success) {
-      toast(state.message)
+      toast.success(state.message)
       redirect("/")
     }
-    toast(state.message)
+    if (state.success === false && state.message.length > 0)
+      toast(state.message)
   }, [state.success])
 
   return (

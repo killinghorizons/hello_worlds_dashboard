@@ -3,7 +3,6 @@ import { eq, desc } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { db } from "@/db/drizzle"
 import { hello } from "@/db/schema"
-import { redirect } from "next/navigation"
 
 export const getData = async () => {
   const data = await db.select().from(hello).orderBy(desc(hello.id))
@@ -32,8 +31,8 @@ export const createHello = async (
         message: "All fields are required"
       }
     }
-    // Create Hello
-    const dbCreateHello = await db.insert(hello).values({
+    // Insert db Hello
+    await db.insert(hello).values({
       name: name,
       code: code
     })
@@ -56,26 +55,38 @@ export const createHello = async (
 
 export const updateHello = async (
   id: number,
-  formState: string,
+  formState: { success: boolean; message: string },
   formData: FormData
-) => {
+): Promise<{ success: boolean; message: string }> => {
   try {
     const name = formData.get("name") as string
     const code = formData.get("code") as string
+
+    // Validation
+    if (!name || !code) {
+      return {
+        success: false,
+        message: "All fields are required"
+      }
+    }
 
     await db
       .update(hello)
       .set({ name: name, code: code })
       .where(eq(hello.id, id))
-  } catch (error) {
-    return {
-      message: "Something went wrong..."
-    }
-  }
 
-  revalidatePath("/")
-  return {
-    message: `Hello ${id} updated...`
+    // Success
+    revalidatePath("/")
+    return {
+      success: true,
+      message: "Hello updated."
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      success: false,
+      message: "An error has occured while updating the Hello."
+    }
   }
 }
 

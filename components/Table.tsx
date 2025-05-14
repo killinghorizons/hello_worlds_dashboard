@@ -24,16 +24,12 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
         header: "Id"
       },
       {
-        accessorKey: "category",
-        header: "C"
+        accessorKey: "name",
+        header: "Name"
       },
       {
-        accessorKey: "language",
-        header: "Language"
-      },
-      {
-        accessorKey: "slug",
-        header: "Slug"
+        accessorKey: "code",
+        header: "Code"
       },
       {
         id: "read",

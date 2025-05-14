@@ -1,17 +1,32 @@
 "use client"
-import { useActionState } from "react"
+// Next
+import { redirect } from "next/navigation"
+// React
+import { useActionState, useEffect } from "react"
 // Comps
 import { IHelloWorld } from "@/types/HelloWorld"
 import SubmitButton from "./SubmitButton"
+// Action
 import { updateHello } from "@/actions/helloActions"
+import { toast } from "sonner"
 
 const UpdateForm = ({ id, name, code }: IHelloWorld) => {
-  const [formState, formAction, isPending] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     updateHello.bind(null, id),
     {
-      message: ""
+      message: "",
+      success: false
     }
   )
+
+  useEffect(() => {
+    if (state.success) {
+      toast.success(state.message)
+      redirect("/")
+    }
+    if (state.success === false && state.message.length > 0)
+      toast(state.message)
+  }, [state.success])
 
   return (
     <form action={formAction}>
