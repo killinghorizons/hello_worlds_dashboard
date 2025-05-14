@@ -3,6 +3,7 @@ import Heading from "@/components/Heading"
 import UpdateForm from "@/components/forms/UpdateForm"
 // Db
 import { getById } from "@/actions/helloActions"
+import { IHelloWorld } from "@/types/HelloWorld"
 
 interface Props {
   params: {
@@ -12,24 +13,12 @@ interface Props {
 
 const Update = async ({ params }: Props) => {
   const { id } = await params
-  const {
-    category,
-    code,
-    language,
-    slug,
-    id: idDb
-  } = await getById(parseInt(id))
+  const { id: idDb, name, code }: IHelloWorld = await getById(parseInt(id))
 
   return (
     <section>
       <Heading text="Update" />
-      <UpdateForm
-        category={category}
-        code={code}
-        language={language}
-        slug={slug}
-        id={idDb}
-      />
+      <UpdateForm id={idDb} name={name} code={code} />
     </section>
   )
 }

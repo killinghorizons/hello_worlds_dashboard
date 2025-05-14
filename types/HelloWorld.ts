@@ -1,9 +1,7 @@
 export interface IHelloWorld {
-  id: number;
-  language: string;
-  code: string;
-  slug: string;
-  category: string;
+  id?: number
+  name?: string
+  code?: string
 }
 
 export interface IHelloWorldForm extends Omit<IHelloWorld, "id"> {}

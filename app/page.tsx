@@ -10,7 +10,7 @@ const Home = async () => {
   return (
     <div>
       <Heading text="Dashboard" />
-      <Table data={data} />
+      {/* <Table data={data} /> */}
     </div>
   )
 }
