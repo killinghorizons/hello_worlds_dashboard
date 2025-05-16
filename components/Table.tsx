@@ -11,45 +11,13 @@ import {
 import { useMemo, useState } from "react"
 // Comps
 import SearchInput from "./SearchInput"
-import BtnLink from "./BtnLink"
-import DeleteButton from "./DeleteButton"
+import columnsValues from "./columnsValues"
 
 const Table = ({ data }: { data: IHelloWorld[] }) => {
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
 
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "id",
-        header: "Id"
-      },
-      {
-        accessorKey: "name",
-        header: "Name"
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <BtnLink
-              href={`/read/${row.original.id}`}
-              label="Read"
-              type="success"
-            />
-            <BtnLink
-              href={`/update/${row.original.id}`}
-              label="Update"
-              type="warning"
-            />
-            <DeleteButton id={row.original.id} />
-          </div>
-        )
-      }
-    ],
-    []
-  )
+  const columns = useMemo(() => columnsValues, [])
 
   const table = useReactTable({
     data,
@@ -75,7 +43,7 @@ const Table = ({ data }: { data: IHelloWorld[] }) => {
       />
       {/* Form */}
       <div className="overflow-x-auto">
-        <table className="table table-zebra mb-5 table-fixed">
+        <table className="table table-zebra mb-5 table-fixed text-left">
           <thead className="font-bold text-xl text-neutral-50">
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id}>
